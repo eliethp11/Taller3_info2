@@ -63,6 +63,11 @@ más altos perderían bordes relevantes.
 
 ## Instalación y uso
 
+python -m venv venv
+venv\Scripts\activate
+pip install pydicom numpy pandas opencv-python
+python main.py
+
 ```bash
 pip install pydicom numpy pandas opencv-python
 python main.py
