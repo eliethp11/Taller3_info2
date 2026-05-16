@@ -21,3 +21,24 @@ def cargar_archivos (self,directorio):
             print(f"El DICOM no es válido:{archivo}---{e}")
 
         print(f"\nTotal de archivos cargados:{len(self.archivos_dicom)}")
+
+def extraer_metadatos(self):
+        """Extrae los tags DICOM de cada archivo y los guarda en un DataFrame"""
+        lista_metadatos = []
+        
+        for ds in self.archivos_dicom:
+            metadatos = {
+                "PatientID":         getattr(ds, "PatientID", "No disponible"),
+                "PatientName":       getattr(ds, "PatientName", "No disponible"),
+                "StudyInstanceUID":  getattr(ds, "StudyInstanceUID", "No disponible"),
+                "StudyDescription":  getattr(ds, "StudyDescription", "No disponible"),
+                "StudyDate":         getattr(ds, "StudyDate", "No disponible"),
+                "Modality":          getattr(ds, "Modality", "No disponible"),
+                "Rows":              getattr(ds, "Rows", "No disponible"),
+                "Columns":           getattr(ds, "Columns", "No disponible"),
+            }
+            lista_metadatos.append(metadatos)
+        
+        self.dataframe = pd.DataFrame(lista_metadatos)
+        print("\nMetadatos extraídos:")
+        print(self.dataframe)
