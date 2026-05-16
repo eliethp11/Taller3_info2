@@ -88,3 +88,4 @@ def procesar_imagenes(self, directorio_salida):
                 
             except Exception as e:
                 print(f"No se pudo procesar imagen: {e}")
+
