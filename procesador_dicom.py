@@ -62,35 +62,35 @@ class ProcesadorDICOM:
             print("\nIntensidad promedio agregada al DataFrame:")
             print(self.dataframe[["PatientID", "Modality", "IntensidadPromedio"]])
 
-def procesar_imagenes(self, directorio_salida):
-        """Normaliza, ecualiza y detecta bordes de cada imagen DICOM"""
-        os.makedirs(directorio_salida, exist_ok=True)
+    def procesar_imagenes(self, directorio_salida):
+            """Normaliza, ecualiza y detecta bordes de cada imagen DICOM"""
+            os.makedirs(directorio_salida, exist_ok=True)
+            
+            for ds in self.archivos_dicom:
+                try:
+                    pixel_array = ds.pixel_array
+                    
+                
+                    if pixel_array.ndim == 3:
+                        pixel_array = pixel_array[0] if pixel_array.shape[0] < pixel_array.shape[-1] else pixel_array[:, :, 0]
+                    
+                
+                    pixel_array = pixel_array.astype(np.float32)
+                    
         
-        for ds in self.archivos_dicom:
-            try:
-                pixel_array = ds.pixel_array
+                    pixel_norm = cv2.normalize(pixel_array, None, 0, 255, cv2.NORM_MINMAX)
+                    pixel_norm = np.uint8(pixel_norm)
+                    
                 
-               
-                if pixel_array.ndim == 3:
-                    pixel_array = pixel_array[0] if pixel_array.shape[0] < pixel_array.shape[-1] else pixel_array[:, :, 0]
-                
-             
-                pixel_array = pixel_array.astype(np.float32)
-                
+                    ecualizada = cv2.equalizeHist(pixel_norm)
+                    
     
-                pixel_norm = cv2.normalize(pixel_array, None, 0, 255, cv2.NORM_MINMAX)
-                pixel_norm = np.uint8(pixel_norm)
-                
-             
-                ecualizada = cv2.equalizeHist(pixel_norm)
-                
- 
-                bordes = cv2.Canny(ecualizada, threshold1=50, threshold2=150)
-                
-                nombre = str(getattr(ds, "StudyInstanceUID", "sin_id"))[:20]
-                cv2.imwrite(f"{directorio_salida}/{nombre}_ecualizada.png", ecualizada)
-                cv2.imwrite(f"{directorio_salida}/{nombre}_bordes.png", bordes)
-                print(f"Imágenes guardadas para: {nombre}")
-                
-            except Exception as e:
-                print(f"No se pudo procesar imagen: {e}")
+                    bordes = cv2.Canny(ecualizada, threshold1=50, threshold2=150)
+                    
+                    nombre = str(getattr(ds, "StudyInstanceUID", "sin_id"))[:20]
+                    cv2.imwrite(f"{directorio_salida}/{nombre}_ecualizada.png", ecualizada)
+                    cv2.imwrite(f"{directorio_salida}/{nombre}_bordes.png", bordes)
+                    print(f"Imágenes guardadas para: {nombre}")
+                    
+                except Exception as e:
+                    print(f"No se pudo procesar imagen: {e}")
