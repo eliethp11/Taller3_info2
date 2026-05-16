@@ -44,7 +44,7 @@ def extraer_metadatos(self):
         print(self.dataframe)
 
 def calcular_intensidad(self):
-        """Calcula el promedio de intensidad de píxeles de cada imagen"""
+        
         intensidades = []
         
         for ds in self.archivos_dicom:
@@ -59,3 +59,32 @@ def calcular_intensidad(self):
         self.dataframe["IntensidadPromedio"] = intensidades
         print("\nIntensidad promedio agregada al DataFrame:")
         print(self.dataframe[["PatientID", "Modality", "IntensidadPromedio"]])
+
+def procesar_imagenes(self, directorio_salida):
+     
+        os.makedirs(directorio_salida, exist_ok=True)
+        
+        for ds in self.archivos_dicom:
+            try:
+                pixel_array = ds.pixel_array
+                
+              
+                pixel_norm = cv2.normalize(
+                    pixel_array, None, 0, 255, cv2.NORM_MINMAX
+                )
+                pixel_norm = np.uint8(pixel_norm)
+                
+              
+                ecualizada = cv2.equalizeHist(pixel_norm)
+                
+               
+                bordes = cv2.Canny(ecualizada, threshold1=50, threshold2=150)
+                
+             
+                nombre = str(getattr(ds, "StudyInstanceUID", "sin_id"))[:20]
+                cv2.imwrite(f"{directorio_salida}/{nombre}_ecualizada.png", ecualizada)
+                cv2.imwrite(f"{directorio_salida}/{nombre}_bordes.png", bordes)
+                print(f"Imágenes guardadas para: {nombre}")
+                
+            except Exception as e:
+                print(f"No se pudo procesar imagen: {e}")
