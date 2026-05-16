@@ -33,6 +33,12 @@ La diferencia conceptual es clara: DICOM maneja **imágenes**, HL7 maneja **even
 - La ecualización puede **amplificar el ruido** presente en la imagen, distorsionando información clínica relevante.
 - Canny es sensible a los umbrales elegidos: umbrales incorrectos pueden generar bordes falsos o perder bordes reales.
 - En imágenes médicas con alta precisión diagnóstica, estas técnicas pueden alterar sutilezas importantes si no se aplican con cuidado.
+### Justificación de umbrales en Canny
+Se utilizaron los umbrales `threshold1=50` y `threshold2=150`, siguiendo la proporción 1:3 
+recomendada en la literatura para imágenes médicas. El umbral bajo (50) permite detectar 
+bordes débiles como tejidos blandos, mientras que el umbral alto (150) confirma bordes 
+fuertes como estructuras óseas. Valores más bajos generarían demasiado ruido y valores 
+más altos perderían bordes relevantes.
 
 ### Escenarios de uso
 - **Útil:** preprocesamiento para segmentación automática, visualización exploratoria, entrenamiento de modelos de IA.
