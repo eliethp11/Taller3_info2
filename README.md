@@ -1,7 +1,7 @@
 # Taller3_info2
 # Taller 3 – Informática Médica: Procesamiento de Archivos DICOM
 
-**Integrantes:** Tu Nombre Aquí  
+**Integrantes:** Elieth Mariana Puentes Zorro 
 **Materia:** Informática 2 – Universidad de Antioquia  
 **Monitor:** Juan Esteban Pineda Lopera
 
