@@ -1,17 +1,17 @@
-import pydicom.data
 from procesador_dicom import ProcesadorDICOM
+import pydicom
 import os
+import shutil
 
-# Obtener archivos DICOM de prueba que trae pydicom
-archivos_prueba = pydicom.data.get_testfiles_name()
+# Obtener la ruta de los archivos de prueba de pydicom
+data_dir = os.path.dirname(pydicom.__file__)
+data_dir = os.path.join(data_dir, "data", "test_files")
 
 # Crear carpeta dicom_files y copiar los archivos de prueba
 os.makedirs("dicom_files", exist_ok=True)
-
-import shutil
-for ruta in archivos_prueba:
-    if ruta.endswith(".dcm"):
-        shutil.copy(ruta, "dicom_files/")
+for archivo in os.listdir(data_dir):
+    if archivo.endswith(".dcm"):
+        shutil.copy(os.path.join(data_dir, archivo), "dicom_files/")
 
 # Ejecutar el procesador
 procesador = ProcesadorDICOM()
