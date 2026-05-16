@@ -42,3 +42,20 @@ def extraer_metadatos(self):
         self.dataframe = pd.DataFrame(lista_metadatos)
         print("\nMetadatos extraídos:")
         print(self.dataframe)
+
+def calcular_intensidad(self):
+        """Calcula el promedio de intensidad de píxeles de cada imagen"""
+        intensidades = []
+        
+        for ds in self.archivos_dicom:
+            try:
+                pixel_array = ds.pixel_array
+                promedio = np.mean(pixel_array)
+                intensidades.append(round(promedio, 2))
+            except Exception as e:
+                print(f"No tiene datos de píxeles: {e}")
+                intensidades.append(None)
+        
+        self.dataframe["IntensidadPromedio"] = intensidades
+        print("\nIntensidad promedio agregada al DataFrame:")
+        print(self.dataframe[["PatientID", "Modality", "IntensidadPromedio"]])
